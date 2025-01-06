@@ -38,9 +38,9 @@ module.exports =
       this.headerBuffer = new Buffer(256);
     }
 
-    constructor(filePath, options) {
+    constructor(filePath, options = {}) {
       super();
-      this.encoding = opts.encoding ?? "utf8";
+      this.encoding = options.encoding ?? "utf8";
       this.filePath = filePath;
     }
 

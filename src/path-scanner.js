@@ -53,6 +53,7 @@ class PathScanner extends EventEmitter {
   //   * `exclusions` {Array} of patterns to exclude. Same matcher as inclusions.
   //   * `includeHidden` {Boolean} default false; true includes hidden files
   constructor(rootPath, options) {
+    super();
     this.rootPath = rootPath;
     if (options == null) { options = {}; }
     this.options = options;
