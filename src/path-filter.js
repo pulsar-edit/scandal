@@ -17,6 +17,8 @@ const fs = require('fs');
 // Public: {PathFilter} makes testing for path inclusion easy.
 module.exports =
 class PathFilter {
+  static MINIMATCH_OPTIONS = { matchBase: true, dot: true };
+
   static escapeRegExp(str) {
     return str.replace(/([\/'*+?|()\[\]{}.\^$])/g, '\\$1');
   }
@@ -36,7 +38,6 @@ class PathFilter {
   //      subdirectory of the exclusion. Same matcher as inclusions.
   //   * `includeHidden` {Boolean} default false; true includes hidden files
   constructor(rootPath, options) {
-    this.MINIMATCH_OPTIONS = { matchBase: true, dot: true };
     this.rootPath = rootPath;
     if (options == null) { options = {}; }
     const {includeHidden, excludeVcsIgnores} = options;
@@ -195,7 +196,7 @@ class PathFilter {
   }
 
   excludeHidden() {
-    const matcher = new Minimatch(".*", this.MINIMATCH_OPTIONS);
+    const matcher = new Minimatch(".*", PathFilter.MINIMATCH_OPTIONS);
     this.exclusions.file.push(matcher);
     return this.exclusions.directory.push(matcher);
   }
@@ -206,7 +207,7 @@ class PathFilter {
     const {deepMatch, disallowDuplicatesFrom} = param;
     const addFileMatcher = (matchers, pattern) => {
       if ((disallowDuplicatesFrom != null) && this.containsPattern(disallowDuplicatesFrom, 'file', pattern)) { return; }
-      return matchers.file.push(new Minimatch(pattern, this.MINIMATCH_OPTIONS));
+      return matchers.file.push(new Minimatch(pattern, PathFilter.MINIMATCH_OPTIONS));
     };
 
     var addDirectoryMatcher = (matchers, pattern, deepMatch) => {
@@ -258,7 +259,7 @@ class PathFilter {
         if (matchIndex > -1) { addDirectoryMatcher(matchers, pattern.slice(0, matchIndex)); }
 
         if ((disallowDuplicatesFrom != null) && this.containsPattern(disallowDuplicatesFrom, 'directory', pattern)) { return; }
-        return matchers.directory.push(new Minimatch(pattern, this.MINIMATCH_OPTIONS));
+        return matchers.directory.push(new Minimatch(pattern, PathFilter.MINIMATCH_OPTIONS));
     };
 
     let pattern = null;
