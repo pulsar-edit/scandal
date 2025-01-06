@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS202: Simplify dynamic range loops
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-let ChunkedExecutor;
 const MAX_CONCURRENT_CHUNK = 20;
 
 // Public: {ChunkedExecutor} will execute on an {Array} paths in a pathQueue only
@@ -27,7 +19,7 @@ const MAX_CONCURRENT_CHUNK = 20;
 //   executor.push '/path/to/lastone.coffee'
 //   ```
 module.exports =
-(ChunkedExecutor = class ChunkedExecutor {
+class ChunkedExecutor {
 
   // Construct a {ChunkedExecutor}
   //
@@ -39,7 +31,7 @@ module.exports =
   constructor(pathQueue, execPathFn) {
     this.push = this.push.bind(this);
     this.execPathFn = execPathFn;
-    this.pathQueue = (Array.from(pathQueue)); // copy the original
+    this.pathQueue = Array.from(pathQueue); // copy the original
     this.pathCount = pathQueue.length;
     this.pathsRunning = 0;
   }
@@ -77,7 +69,9 @@ module.exports =
   */
 
   executeNextPathIfPossible() {
-    if ((this.pathsRunning < MAX_CONCURRENT_CHUNK) && this.pathQueue.length) { return this.executePath(this.pathQueue.shift()); }
+    if ((this.pathsRunning < MAX_CONCURRENT_CHUNK) && this.pathQueue.length) {
+      return this.executePath(this.pathQueue.shift());
+    }
   }
 
   executePath(filePath) {
@@ -93,4 +87,4 @@ module.exports =
     this.executeNextPathIfPossible();
     if (this.pathCount === 0) { return this.doneCallback(); }
   }
-});
+}
