@@ -23,6 +23,6 @@ jobs:
     - name: Install Python setuptools
       run: python3 -m pip install setuptools
     - name: Install Dependencies
-      run: npm install
+      run: yarn install
     - name: Test
       run: npm run test
