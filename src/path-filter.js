@@ -18,6 +18,7 @@ const fs = require('fs');
 
 // Public: {PathFilter} makes testing for path inclusion easy.
 module.exports =
+// WARNING: Here be dragons. Messy decaf, but breaks easily on further efforts
 (PathFilter = (function() {
   PathFilter = class PathFilter {
     static initClass() {
