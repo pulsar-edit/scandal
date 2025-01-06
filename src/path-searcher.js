@@ -7,7 +7,6 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
-let PathSearcher;
 const fs = require("fs");
 const os = require("os");
 const {EventEmitter} = require("events");
