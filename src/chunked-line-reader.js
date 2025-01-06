@@ -50,8 +50,8 @@ class ChunkedLineReader extends Readable {
       let remainder = '';
       if (isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
 
-      if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(this.chunkSize); }
-      let bytesRead = fs.readSync(fd, this.chunkedBuffer, 0, this.chunkSize, 0);
+      if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(this.CHUNK_SIZE); }
+      let bytesRead = fs.readSync(fd, this.chunkedBuffer, 0, this.CHUNK_SIZE, 0);
       const decoder = new StringDecoder(this.encoding);
 
       while (bytesRead) {
@@ -82,7 +82,7 @@ class ChunkedLineReader extends Readable {
         }
 
         offset += bytesRead;
-        bytesRead = fs.readSync(fd, this.chunkedBuffer, 0, this.chunkSize, offset);
+        bytesRead = fs.readSync(fd, this.chunkedBuffer, 0, this.CHUNK_SIZE, offset);
       }
 
       if (remainder) { return this.push(remainder); }
