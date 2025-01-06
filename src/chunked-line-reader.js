@@ -1,9 +1,7 @@
 /*
  * decaffeinate suggestions:
- * DS002: Fix invalid constructor
  * DS102: Remove unnecessary code created because of implicit returns
  * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
 let ChunkedLineReader;
@@ -35,15 +33,14 @@ module.exports =
 (ChunkedLineReader = (function() {
   ChunkedLineReader = class ChunkedLineReader extends Readable {
     static initClass() {
-
       this.CHUNK_SIZE = 10240;
       this.chunkedBuffer = null;
       this.headerBuffer = new Buffer(256);
     }
 
     constructor(filePath, options) {
-      this.encoding = (options != null ? options.encoding : undefined) != null ? (options != null ? options.encoding : undefined) : "utf8";
       super();
+      this.encoding = opts.encoding ?? "utf8";
       this.filePath = filePath;
     }
 

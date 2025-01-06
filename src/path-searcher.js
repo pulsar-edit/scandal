@@ -1,6 +1,5 @@
 /*
  * decaffeinate suggestions:
- * DS002: Fix invalid constructor
  * DS101: Remove unnecessary use of Array.from
  * DS102: Remove unnecessary code created because of implicit returns
  * DS205: Consider reworking code to avoid use of IIFEs
@@ -115,6 +114,7 @@ class PathSearcher extends EventEmitter {
   //   * `wordBreakRegex` {RegExp} default `/[ \r\n\t;:?=&\/]/`;
   //      Used to break on a word when finding the context for a match.
   constructor(param) {
+    super();
     if (param == null) { param = {}; }
     const {maxLineLength, leadingContextLineCount, trailingContextLineCount, wordBreakRegex} = param;
     this.maxLineLength = maxLineLength;
