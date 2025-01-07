@@ -172,9 +172,9 @@ class PathFilter {
     // Strip off trailing wildcards from the parent pattern
     let parentPattern = parent.pattern;
     const directoryPattern = new RegExp(`\
-${'\\'+path.sep}\\*$|\
-${'\\'+path.sep}\\*\\*$\
-`);
+      ${'\\'+path.sep}\\*$|\
+      ${'\\'+path.sep}\\*\\*$\
+      `);
       const matchIndex = parentPattern.search(directoryPattern);
       if (matchIndex > -1) { parentPattern = parentPattern.slice(0, matchIndex); }
 
@@ -253,8 +253,8 @@ ${'\\'+path.sep}\\*\\*$\
       }
 
       const directoryPattern = new RegExp(`\
-${'\\'+path.sep}\\*$|\
-${'\\'+path.sep}\\*\\*$\
+        ${'\\'+path.sep}\\*$|\
+        ${'\\'+path.sep}\\*\\*$\
         `);
         const matchIndex = pattern.search(directoryPattern);
         if (matchIndex > -1) { addDirectoryMatcher(matchers, pattern.slice(0, matchIndex)); }
@@ -275,9 +275,9 @@ ${'\\'+path.sep}\\*\\*$\
       if ((pattern.length === 0) || (pattern[0] === '#')) { continue; }
 
       const endsWithSeparatorOrStar = new RegExp(`\
-${'\\'+path.sep}$|\
-${'\\'+path.sep}\\**$\
-`);
+        ${'\\'+path.sep}$|\
+        ${'\\'+path.sep}\\**$\
+        `);
         if (endsWithSeparatorOrStar.test(pattern)) {
           // Is a dir if it ends in a '/' or '/*'
           addDirectoryMatcher(matchers, pattern, deepMatch);
