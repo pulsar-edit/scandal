@@ -6,11 +6,10 @@
  * DS104: Avoid inline assignments
  * DS202: Simplify dynamic range loops
  * DS204: Change includes calls to have a more natural evaluation order
- * DS206: Consider reworking classes to avoid initClass
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
-let PathFilter;
+
 const {Minimatch} = require('minimatch');
 const GitUtils = require('git-utils');
 const path = require('path');
@@ -18,11 +17,8 @@ const fs = require('fs');
 
 // Public: {PathFilter} makes testing for path inclusion easy.
 module.exports =
-(PathFilter = (function() {
-  PathFilter = class PathFilter {
-    static initClass() {
-      this.MINIMATCH_OPTIONS = { matchBase: true, dot: true };
-    }
+class PathFilter {
+    static MINIMATCH_OPTIONS = { matchBase: true, dot: true };
 
     static escapeRegExp(str) {
       return str.replace(/([\/'*+?|()\[\]{}.\^$])/g, '\\$1');
@@ -314,10 +310,7 @@ ${'\\'+path.sep}\\**$\
       }
       return false;
     }
-  };
-  PathFilter.initClass();
-  return PathFilter;
-})());
+  }
 
 function __guard__(value, transform) {
   return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
