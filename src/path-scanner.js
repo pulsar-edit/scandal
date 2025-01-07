@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS002: Fix invalid constructor
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-let PathScanner;
 const fs = require("fs");
 const path = require("path");
 const {EventEmitter} = require("events");
@@ -40,7 +32,7 @@ const DIR_SEP = path.sep;
 // * `finished-scanning` Emit when the scanner is finished
 //
 module.exports =
-(PathScanner = class PathScanner extends EventEmitter {
+class PathScanner extends EventEmitter {
 
   // Public: Create a {PathScanner} object.
   //
@@ -53,9 +45,9 @@ module.exports =
   //      directory dirname.
   //   * `exclusions` {Array} of patterns to exclude. Same matcher as inclusions.
   //   * `includeHidden` {Boolean} default false; true includes hidden files
-  constructor(rootPath, options) {
+  constructor(rootPath, options = {}) {
+    super();
     this.rootPath = rootPath;
-    if (options == null) { options = {}; }
     this.options = options;
     this.asyncCallsInProgress = 0;
     this.realPathCache = {};
@@ -150,4 +142,4 @@ module.exports =
       return this.emit('finished-scanning', this);
     }
   }
-});
+}
