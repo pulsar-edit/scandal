@@ -24,78 +24,78 @@ const lastIndexOf = function(buffer, length, char) {
 // the data handler for more efficiency.
 module.exports =
 class ChunkedLineReader extends Readable {
-    constructor(filePath, options) {
-      super();
-      this.encoding = options?.encoding ?? "utf8";
-      this.filePath = filePath;
+  constructor(filePath, options) {
+    super();
+    this.encoding = options?.encoding ?? "utf8";
+    this.filePath = filePath;
 
-      this.CHUNK_SIZE = 10240;
-      this.chunkedBuffer = null;
-      this.headerBuffer = new Buffer(256);
-    }
+    this.CHUNK_SIZE = 10240;
+    this.chunkedBuffer = null;
+    this.headerBuffer = new Buffer(256);
+  }
 
-    isBinaryFile() {
-      const fd = fs.openSync(this.filePath, "r");
-      const isBin = isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
-      fs.closeSync(fd);
-      return isBin;
-    }
+  isBinaryFile() {
+    const fd = fs.openSync(this.filePath, "r");
+    const isBin = isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
+    fs.closeSync(fd);
+    return isBin;
+  }
 
-    _read() {
-      let fd;
-      try {
-        fd = fs.openSync(this.filePath, "r");
-        const line = 0;
-        let offset = 0;
-        let remainder = '';
-        const chunkSize = this.CHUNK_SIZE;
-        if (isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
+  _read() {
+    let fd;
+    try {
+      fd = fs.openSync(this.filePath, "r");
+      const line = 0;
+      let offset = 0;
+      let remainder = '';
+      const chunkSize = this.CHUNK_SIZE;
+      if (isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
 
-        if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(chunkSize); }
-        const chunkedBuffer = this.chunkedBuffer;
-        let bytesRead = fs.readSync(fd, chunkedBuffer, 0, chunkSize, 0);
-        const decoder = new StringDecoder(this.encoding);
+      if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(chunkSize); }
+      const chunkedBuffer = this.chunkedBuffer;
+      let bytesRead = fs.readSync(fd, chunkedBuffer, 0, chunkSize, 0);
+      const decoder = new StringDecoder(this.encoding);
 
-        while (bytesRead) {
-          // Scary looking. Uses very few new objects
-          var newRemainder, str;
-          const char = 10;
-          const index = lastIndexOf(chunkedBuffer, bytesRead, char);
+      while (bytesRead) {
+        // Scary looking. Uses very few new objects
+        var newRemainder, str;
+        const char = 10;
+        const index = lastIndexOf(chunkedBuffer, bytesRead, char);
 
-          if (index < 0) {
-            // no newlines here, the whole thing is a remainder
-            newRemainder = decoder.write(chunkedBuffer.slice(0, bytesRead));
-            str = null;
-          } else if ((index > -1) && (index === (bytesRead - 1))) {
-            // the last char is a newline
-            newRemainder = '';
-            str = decoder.write(chunkedBuffer.slice(0, bytesRead));
-          } else {
-            str = decoder.write(chunkedBuffer.slice(0, index+1));
-            newRemainder = decoder.write(chunkedBuffer.slice(index+1, bytesRead));
-          }
-
-          if (str) {
-            if (remainder) { str = remainder + str; }
-            this.push(str);
-            remainder = newRemainder;
-          } else {
-            remainder = remainder + newRemainder;
-          }
-
-          offset += bytesRead;
-          bytesRead = fs.readSync(fd, chunkedBuffer, 0, chunkSize, offset);
+        if (index < 0) {
+          // no newlines here, the whole thing is a remainder
+          newRemainder = decoder.write(chunkedBuffer.slice(0, bytesRead));
+          str = null;
+        } else if ((index > -1) && (index === (bytesRead - 1))) {
+          // the last char is a newline
+          newRemainder = '';
+          str = decoder.write(chunkedBuffer.slice(0, bytesRead));
+        } else {
+          str = decoder.write(chunkedBuffer.slice(0, index+1));
+          newRemainder = decoder.write(chunkedBuffer.slice(index+1, bytesRead));
         }
 
-        if (remainder) { return this.push(remainder); }
+        if (str) {
+          if (remainder) { str = remainder + str; }
+          this.push(str);
+          remainder = newRemainder;
+        } else {
+          remainder = remainder + newRemainder;
+        }
 
-      } catch (error) {
-        return this.emit('error', error);
+        offset += bytesRead;
+        bytesRead = fs.readSync(fd, chunkedBuffer, 0, chunkSize, offset);
       }
 
-      finally {
-        if (fd != null) { fs.closeSync(fd); }
-        this.push(null);
-      }
+      if (remainder) { return this.push(remainder); }
+
+    } catch (error) {
+      return this.emit('error', error);
+    }
+
+    finally {
+      if (fd != null) { fs.closeSync(fd); }
+      this.push(null);
     }
   }
+}
