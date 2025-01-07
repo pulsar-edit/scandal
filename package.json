@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "jasmine-focused": "^1.0.7",
-    "rimraf": "^2.4.2",
     "wrench": "^1.5.8"
   }
 }
