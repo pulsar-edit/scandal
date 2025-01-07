@@ -9,8 +9,8 @@ const ChunkedLineReader = require('./chunked-line-reader');
 
 class ReplaceTransformer extends Transform {
   constructor(regex, replacementText, {dryReplace}) {
-    this.replacements = 0;
     super();
+    this.replacements = 0;
     this.regex = regex;
     this.replacementText = replacementText;
     this.dryReplace = dryReplace;
