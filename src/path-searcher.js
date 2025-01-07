@@ -1,13 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS002: Fix invalid constructor
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-let PathSearcher;
 const fs = require("fs");
 const os = require("os");
 const {EventEmitter} = require("events");
@@ -100,7 +90,7 @@ const TRAILING_LINE_END_REGEX = /\r?\n?$/;
 // * `error` {Error} object
 //
 module.exports =
-(PathSearcher = class PathSearcher extends EventEmitter {
+class PathSearcher extends EventEmitter {
 
   // Public: Construct a {PathSearcher} object.
   //
@@ -116,6 +106,7 @@ module.exports =
   //   * `wordBreakRegex` {RegExp} default `/[ \r\n\t;:?=&\/]/`;
   //      Used to break on a word when finding the context for a match.
   constructor(param) {
+    super();
     if (param == null) { param = {}; }
     const {maxLineLength, leadingContextLineCount, trailingContextLineCount, wordBreakRegex} = param;
     this.maxLineLength = maxLineLength;
@@ -243,7 +234,8 @@ module.exports =
             if (lineMatches != null) {
               result.push((() => {
                 const result1 = [];
-                for (match of Array.from(lineMatches)) {                   result1.push(recentMatches.push(match));
+                for (match of Array.from(lineMatches)) {
+                  result1.push(recentMatches.push(match));
                 }
                 return result1;
               })());
@@ -330,4 +322,4 @@ module.exports =
     if (i > maxIndex) { return maxIndex; }
     return i;
   }
-});
+}
