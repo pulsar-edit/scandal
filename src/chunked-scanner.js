@@ -3,7 +3,7 @@ const ChunkedExecutor = require('./chunked-executor');
 module.exports =
 class ChunkedScanner extends ChunkedExecutor {
   constructor(scanner, execPathFn) {
-    super([], execPath);
+    super([], execPathFn);
     this.finishedScanning = false;
     this.onFinishedScanning = this.onFinishedScanning.bind(this);
     this.scanner = scanner;
