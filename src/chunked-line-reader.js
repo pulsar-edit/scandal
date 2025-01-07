@@ -26,7 +26,7 @@ module.exports =
 class ChunkedLineReader extends Readable {
   constructor(filePath, options = {}) {
     super();
-    this.encoding = options.encoding ?? "utf8";
+    this.encoding = options?.encoding ?? "utf8";
     this.filePath = filePath;
 
     this.CHUNK_SIZE = 10240;
