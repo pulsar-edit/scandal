@@ -1,12 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS002: Fix invalid constructor
- * DS102: Remove unnecessary code created because of implicit returns
- * DS206: Consider reworking classes to avoid initClass
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-let ChunkedLineReader;
 const fs = require("fs");
 const isBinaryFile = require("isbinaryfile");
 const {Readable} = require('stream');
@@ -32,24 +23,20 @@ const lastIndexOf = function(buffer, length, char) {
 // This will collect all the lines in the file, or you can process each line in
 // the data handler for more efficiency.
 module.exports =
-(ChunkedLineReader = (function() {
-  ChunkedLineReader = class ChunkedLineReader extends Readable {
-    static initClass() {
+class ChunkedLineReader extends Readable {
+    constructor(filePath, options) {
+      super();
+      this.encoding = options?.encoding ?? "utf8";
+      this.filePath = filePath;
 
       this.CHUNK_SIZE = 10240;
       this.chunkedBuffer = null;
       this.headerBuffer = new Buffer(256);
     }
 
-    constructor(filePath, options) {
-      this.encoding = (options != null ? options.encoding : undefined) != null ? (options != null ? options.encoding : undefined) : "utf8";
-      super();
-      this.filePath = filePath;
-    }
-
     isBinaryFile() {
       const fd = fs.openSync(this.filePath, "r");
-      const isBin = isBinaryFile(this.constructor.headerBuffer, fs.readSync(fd, this.constructor.headerBuffer, 0, 256));
+      const isBin = isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
       fs.closeSync(fd);
       return isBin;
     }
@@ -61,13 +48,11 @@ module.exports =
         const line = 0;
         let offset = 0;
         let remainder = '';
-        const chunkSize = this.constructor.CHUNK_SIZE;
-        if (isBinaryFile(this.constructor.headerBuffer, fs.readSync(fd, this.constructor.headerBuffer, 0, 256))) { return; }
+        const chunkSize = this.CHUNK_SIZE;
+        if (isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
 
-        if (this.constructor.chunkedBuffer == null) { this.constructor.chunkedBuffer = new Buffer(chunkSize); }
-        const {
-          chunkedBuffer
-        } = this.constructor;
+        if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(chunkSize); }
+        const chunkedBuffer = this.chunkedBuffer;
         let bytesRead = fs.readSync(fd, chunkedBuffer, 0, chunkSize, 0);
         const decoder = new StringDecoder(this.encoding);
 
@@ -113,7 +98,4 @@ module.exports =
         this.push(null);
       }
     }
-  };
-  ChunkedLineReader.initClass();
-  return ChunkedLineReader;
-})());
+  }
