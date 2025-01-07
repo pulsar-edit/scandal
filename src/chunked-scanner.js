@@ -1,17 +1,10 @@
-/*
- * decaffeinate suggestions:
- * DS002: Fix invalid constructor
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-let ChunkedScanner;
 const ChunkedExecutor = require('./chunked-executor');
 
 module.exports =
-(ChunkedScanner = class ChunkedScanner extends ChunkedExecutor {
+class ChunkedScanner extends ChunkedExecutor {
   constructor(scanner, execPathFn) {
-    this.finishedScanning = false;
     super([], execPathFn);
+    this.finishedScanning = false;
     this.onFinishedScanning = this.onFinishedScanning.bind(this);
     this.scanner = scanner;
   }
@@ -40,4 +33,4 @@ module.exports =
 
     return isFinished;
   }
-});
+}
