@@ -21,12 +21,13 @@
   "dependencies": {
     "argparse": "^1.0.2",
     "git-utils": "^5.7.3",
-    "isbinaryfile": "^2.0.4",
+    "isbinaryfile": "^3.0.3",
     "minimatch": "^2.0.9",
     "split": "^1.0.0",
     "temp": "^0.8.3"
   },
   "devDependencies": {
+    "coffeelint": "^1.15.7",
     "jasmine-focused": "^1.0.7",
     "wrench": "^1.5.8"
   }
