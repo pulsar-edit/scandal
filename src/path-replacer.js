@@ -1,11 +1,3 @@
-/*
- * decaffeinate suggestions:
- * DS002: Fix invalid constructor
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
- */
-let PathReplacer;
 const fs = require('fs');
 const temp = require('temp').track();
 const {EventEmitter} = require('events');
@@ -17,8 +9,8 @@ const ChunkedLineReader = require('./chunked-line-reader');
 
 class ReplaceTransformer extends Transform {
   constructor(regex, replacementText, {dryReplace}) {
-    this.replacements = 0;
     super();
+    this.replacements = 0;
     this.regex = regex;
     this.replacementText = replacementText;
     this.dryReplace = dryReplace;
@@ -38,11 +30,10 @@ class ReplaceTransformer extends Transform {
 }
 
 module.exports =
-(PathReplacer = class PathReplacer extends EventEmitter {
-  constructor(param) {
-    if (param == null) { param = {}; }
-    const {dryReplace} = param;
-    this.dryReplace = dryReplace;
+class PathReplacer extends EventEmitter {
+  constructor(param = {}) {
+    super();
+    this.dryReplace = param?.dryReplace;
   }
 
   replacePaths(regex, replacementText, paths, doneCallback) {
@@ -108,4 +99,4 @@ module.exports =
 
     return reader.pipe(replacer).pipe(output);
   }
-});
+}
