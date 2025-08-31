@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require("../lib/scandal.js").main();
+require("../src/scandal.js").main();
