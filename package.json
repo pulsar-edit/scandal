@@ -1,7 +1,7 @@
 {
   "name": "scandal",
   "version": "3.2.0",
-  "description": "Directory Search and Scan Utilities",
+  "description": "Directory search and scan utilities",
   "main": "./src/scandal.js",
   "bin": {
     "scandal": "./bin/scandal"
@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/atom/scandal.git"
+    "url": "https://github.com/pulsar-edit/scandal.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/atom/scandal/issues"
+    "url": "https://github.com/pulsar-edit/scandal/issues"
   },
   "homepage": "http://atom.github.io/scandal",
   "dependencies": {
