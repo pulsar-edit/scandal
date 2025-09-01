@@ -7,7 +7,7 @@
     "scandal": "./bin/scandal"
   },
   "scripts": {
-    "test": "jasmine-focused --captureExceptions --coffee spec/"
+    "test": "jasmine-focused --captureExceptions spec/"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,6 @@
     "temp": "^0.8.3"
   },
   "devDependencies": {
-    "coffeelint": "^1.15.7",
     "jasmine-focused": "^1.0.7",
     "wrench": "^1.5.8"
   }
