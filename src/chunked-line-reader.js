@@ -36,7 +36,7 @@ class ChunkedLineReader extends Readable {
 
   isBinaryFile() {
     const fd = fs.openSync(this.filePath, "r");
-    const isBin = isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
+    const isBin = isBinaryFile.sync(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
     fs.closeSync(fd);
     return isBin;
   }
@@ -49,7 +49,7 @@ class ChunkedLineReader extends Readable {
       let offset = 0;
       let remainder = '';
       const chunkSize = this.CHUNK_SIZE;
-      if (isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
+      if (isBinaryFile.sync(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
 
       if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(chunkSize); }
       const chunkedBuffer = this.chunkedBuffer;
