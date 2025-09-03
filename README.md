@@ -26,17 +26,14 @@ To be clear, scandal is not a CLI. It can be used from the terminal, but in prac
 
 Usage is simple:
 
-```coffeescript
-{PathScanner} = require 'scandal'
-scanner = new PathScanner('/Users/me/myDopeProject', options)
+```js
+const { PathScanner } = require('scandal');
+let scanner = new PathScanner('/Users/me/myDopeProject', options);
 
-scanner.on 'path-found', (path) ->
-  console.log(path)
+scanner.on('path-found', (path) => console.log(path));
+scanner.on('finished-scanning', () => console.log('All done!'));
 
-scanner.on 'finished-scanning', ->
-  console.log('All done!')
-
-scanner.scan()
+scanner.scan();
 ```
 
 `PathScanner` keeps no state. You must consume paths via the `path-found` event.
@@ -50,25 +47,28 @@ scanner.scan()
 
 ### PathSearcher
 
-```coffeescript
-{PathSearcher} = require 'scandal'
-searcher = new PathSearcher()
+```js
+const { PathSearcher } = require('scandal');
+let searcher = new PathSearcher();
 
-# You can subscribe to a `results-found` event
-searcher.on 'results-found', (result) ->
-  # result will contain all the matches for a single path
-  console.log("Single Path's Results", result)
+// You can subscribe to a `results-found` event
+searcher.on('results-found', (result) => {
+  // result will contain all the matches for a single path
+  console.log("Single Path's Results", result);
+});
 
-# Search a list of paths
-searcher.searchPaths /text/gi, ['/Some/path', ...], (results) ->
-  console.log('Done Searching', results)
+// Search a list of paths
+searcher.searchPaths(/text/gi, (['/Some/path', /* ... */]), (results) => {
+  console.log('Done Searching', results);
+});
 
-# Search a single path
-searcher.searchPath /text/gi, '/Some/path', (result) ->
-  console.log('Done Searching', result)
+// Search a single path
+searcher.searchPath(/text/gi, '/Some/path', (result) => {
+  console.log('Done Searching', result);
+});
 ```
 
-Results from line 10 (1 based) are in the following format.
+Results from line 10 (1-based) are in the following format:
 
 ```json
 {
@@ -84,29 +84,31 @@ Results from line 10 (1 based) are in the following format.
 
 Like the `PathScanner` the searcher keeps no state. You need to consume results via the done callbacks or event.
 
-File reading is fast and memory efficient. It reads in 10k chunks and writes over each previous chunk. Small object creation is kept to a minimum during the read to make light use of the GC.
+File reading is fast and memory-efficient. It reads in 10k chunks and writes over each previous chunk. Small object creation is kept to a minimum during the read to make light use of the GC.
 
 ### PathFilter
 
-A third object, `PathFilter` is available, but intended for use by the `PathScanner`.
+A third object, `PathFilter`, is available, but intended for use by the `PathScanner`.
 
 ## Using the scanner and searcher together
 
 If you dont want to think about combining the `PathScanner` and `PathSearcher` in your own way, a `search` function is provided.
 
-```coffeescript
-{search, PathScanner, PathSearcher} = require 'scandal'
+```js
+const { search, PathScanner, PathSearcher } = require('scandal');
 
-path = '/path/to/search'
-scanner = new PathScanner(path, excludeVcsIgnores: true)
-searcher = new PathSearcher()
+let path = '/path/to/search';
+let scanner = new PathScanner(path, { excludeVcsIgnores: true });
+let searcher = new PathSearcher();
 
-searcher.on 'results-found' (result) ->
-  # do something rad with the result!
+searcher.on('results-found', (result) => {
+  // do something rad with the result!
+});
 
-name = "Search #{path}"
-console.time name
-console.log name
-search /text/ig, scanner, searcher, ->
-  console.timeEnd name
+let name = `Search ${path}`;
+console.time(name);
+console.log(name);
+search(/text/ig, scanner, searcher, () => {
+  console.timeEnd(name);
+});
 ```

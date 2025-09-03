@@ -1,27 +1,27 @@
 {
   "name": "scandal",
   "version": "3.2.0",
-  "description": "Directory Search and Scan Utilities",
+  "description": "Directory search and scan utilities",
   "main": "./src/scandal.js",
   "bin": {
     "scandal": "./bin/scandal"
   },
   "scripts": {
-    "test": "jasmine-focused --captureExceptions --coffee spec/"
+    "test": "jasmine-focused --captureExceptions spec/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/atom/scandal.git"
+    "url": "https://github.com/pulsar-edit/scandal.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/atom/scandal/issues"
+    "url": "https://github.com/pulsar-edit/scandal/issues"
   },
   "homepage": "http://atom.github.io/scandal",
   "dependencies": {
     "argparse": "^1.0.2",
     "git-utils": "^5.7.3",
-    "isbinaryfile": "^2.0.4",
+    "isbinaryfile": "^3.0.3",
     "minimatch": "^2.0.9",
     "split": "^1.0.0",
     "temp": "^0.8.3"

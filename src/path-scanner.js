@@ -106,9 +106,20 @@ class PathScanner extends EventEmitter {
   }
 
   stat(filePath) {
-    // lstat is SLOW, but what other way to determine if something is a directory or file ?
-    // also, sync is about 200ms faster than async...
-    let stat = fs.lstatSync(filePath);
+    // `lstat` is SLOW, but what other way to determine if something is a
+    // directory or a file? also, sync is about 200ms faster than async...
+
+    // This can throw if the entry does not exist, or for reasons of file
+    // permissions.
+    //
+    // TODO: When we no longer have to support Node 14.16, we can change this
+    // to use the `throwIfNoEntry: false` that was added in 14.17.
+    let stat;
+    try {
+      stat = fs.lstatSync(filePath);
+    } catch (err) {
+      return null;
+    }
 
     if (this.options.follow && stat.isSymbolicLink()) {
       if (this.isInternalSymlink(filePath)) {

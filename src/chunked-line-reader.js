@@ -3,13 +3,13 @@ const isBinaryFile = require("isbinaryfile");
 const {Readable} = require('stream');
 const {StringDecoder} = require('string_decoder');
 
-const lastIndexOf = function(buffer, length, char) {
+function lastIndexOf(buffer, length, char) {
   let i = length;
   while (i--) {
     if (buffer[i] === char) { return i; }
   }
   return -1;
-};
+}
 
 // Will ensure data will be read on a line boundary. So this will always do the
 // right thing:
@@ -31,12 +31,12 @@ class ChunkedLineReader extends Readable {
 
     this.CHUNK_SIZE = 10240;
     this.chunkedBuffer = null;
-    this.headerBuffer = new Buffer(256);
+    this.headerBuffer = Buffer.alloc(256);
   }
 
   isBinaryFile() {
     const fd = fs.openSync(this.filePath, "r");
-    const isBin = isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
+    const isBin = isBinaryFile.sync(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256));
     fs.closeSync(fd);
     return isBin;
   }
@@ -45,13 +45,21 @@ class ChunkedLineReader extends Readable {
     let fd;
     try {
       fd = fs.openSync(this.filePath, "r");
-      const line = 0;
       let offset = 0;
       let remainder = '';
       const chunkSize = this.CHUNK_SIZE;
-      if (isBinaryFile(this.headerBuffer, fs.readSync(fd, this.headerBuffer, 0, 256))) { return; }
+      if (
+        isBinaryFile.sync(
+          this.headerBuffer,
+          fs.readSync(fd, this.headerBuffer, 0, 256)
+        )
+      ) {
+        return;
+      }
 
-      if (this.chunkedBuffer == null) { this.chunkedBuffer = new Buffer(chunkSize); }
+      if (this.chunkedBuffer == null) {
+        this.chunkedBuffer = Buffer.alloc(chunkSize);
+      }
       const chunkedBuffer = this.chunkedBuffer;
       let bytesRead = fs.readSync(fd, chunkedBuffer, 0, chunkSize, 0);
       const decoder = new StringDecoder(this.encoding);
