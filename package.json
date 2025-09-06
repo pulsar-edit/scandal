@@ -1,5 +1,5 @@
 {
-  "name": "scandal",
+  "name": "@pulsar-edit/scandal",
   "version": "3.2.0",
   "description": "Directory search and scan utilities",
   "main": "./src/scandal.js",
